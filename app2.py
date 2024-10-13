@@ -33,15 +33,20 @@ def scientific_calculator():
         
         if st.button("Calculate"):
             if operation == "Sine":
-                st.write(f"sin({num}) = {math.sin(math.radians(num))}")
+                result = math.sin(math.radians(num))
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>sin({num}) = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Cosine":
-                st.write(f"cos({num}) = {math.cos(math.radians(num))}")
+                result = math.cos(math.radians(num))
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>cos({num}) = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Tangent":
-                st.write(f"tan({num}) = {math.tan(math.radians(num))}")
+                result = math.tan(math.radians(num))
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>tan({num}) = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Logarithm (base 10)":
-                st.write(f"log({num}) = {math.log10(num)}")
+                result = math.log10(num)
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>log({num}) = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Square Root":
-                st.write(f"√{num} = {math.sqrt(num)}")
+                result = math.sqrt(num)
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>√{num} = {result}</h2>", unsafe_allow_html=True)
     
     # Handling two-operand operations
     else:
@@ -50,19 +55,20 @@ def scientific_calculator():
         
         if st.button("Calculate"):
             if operation == "Add":
-                st.write(f"{num1} + {num2} = {num1 + num2}")
+                result = num1 + num2
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} + {num2} = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Subtract":
-                st.write(f"{num1} - {num2} = {num1 - num2}")
+                result = num1 - num2
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} - {num2} = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Multiply":
-                st.write(f"{num1} * {num2} = {num1 * num2}")
+                result = num1 * num2
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} * {num2} = {result}</h2>", unsafe_allow_html=True)
             elif operation == "Divide":
                 if num2 != 0:
-                    st.write(f"{num1} / {num2} = {num1 / num2}")
+                    result = num1 / num2
+                    st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} / {num2} = {result}</h2>", unsafe_allow_html=True)
                 else:
-                    st.write("Cannot divide by zero")
+                    st.markdown("<h2 style='color: red; font-weight: bold; font-size: 24px;'>Cannot divide by zero</h2>", unsafe_allow_html=True)
             elif operation == "Power (x^y)":
-                st.write(f"{num1}^{num2} = {math.pow(num1, num2)}")
-
-# Running the app
-if __name__ == "__main__":
-    scientific_calculator()
+                result = math.pow(num1, num2)
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>
