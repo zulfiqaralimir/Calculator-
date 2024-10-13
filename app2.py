@@ -96,4 +96,15 @@ def scientific_calculator():
             elif operation == "Cosine":
                 result = math.cos(math.radians(st.session_state.num1))
             elif operation == "Tangent":
-                result = math.tan(math.radians(st.session_state.num1)
+                result = math.tan(math.radians(st.session_state.num1))  # Fixed the typo here
+            elif operation == "Logarithm":
+                result = math.log10(st.session_state.num1)
+            elif operation == "Square Root":
+                result = math.sqrt(st.session_state.num1)
+            elif operation == "Power":
+                result = math.pow(st.session_state.num1, st.session_state.num2)
+
+            st.write(f"**Result: {result}**")
+
+if __name__ == "__main__":
+    scientific_calculator()
