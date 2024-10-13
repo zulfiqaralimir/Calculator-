@@ -3,5 +3,5 @@ numpy
 matplotlib
 SpeechRecognition
 pyaudio
-
+plotly
 
