@@ -71,4 +71,8 @@ def scientific_calculator():
                     st.markdown("<h2 style='color: red; font-weight: bold; font-size: 24px;'>Cannot divide by zero</h2>", unsafe_allow_html=True)
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>
+                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1}^{num2} = {result}</h2>", unsafe_allow_html=True)
+
+# Running the app
+if __name__ == "__main__":
+    scientific_calculator()
