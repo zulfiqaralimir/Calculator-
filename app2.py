@@ -6,7 +6,7 @@ def scientific_calculator():
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
     
     # Displaying an image (replace with your image URL or path)
-    st.image("https://png.pngtree.com/png-vector/20221019/ourmid/pngtree-image-calculator-png-image_6352778.png", use_column_width=True)
+    #st.image("https://png.pngtree.com/png-vector/20221019/ourmid/pngtree-image-calculator-png-image_6352778.png", use_column_width=True)
 
     # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
