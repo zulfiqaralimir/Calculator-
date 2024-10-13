@@ -1,12 +1,14 @@
 import streamlit as st
 import math
+import numpy as np
+import matplotlib.pyplot as plt
 
 def scientific_calculator():
     # Green heading for the title
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
     
     # Displaying an image with specified dimensions (width=300 pixels and height=75 pixels)
-    #st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
+    st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
 
     # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
@@ -27,7 +29,7 @@ def scientific_calculator():
     operation = st.selectbox("Select operation", [
         "Add", "Subtract", "Multiply", "Divide", 
         "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
-        "Square Root", "Power (x^y)"
+        "Square Root", "Power (x^y)", "Graph a Function"
     ])
 
     # Handling single-operand operations
@@ -52,7 +54,7 @@ def scientific_calculator():
                 st.latex(f"\\sqrt{{{num}}} = {result}")
     
     # Handling two-operand operations
-    else:
+    elif operation in ["Add", "Subtract", "Multiply", "Divide", "Power (x^y)"]:
         num1 = st.number_input("Enter first number", value=0.0)
         num2 = st.number_input("Enter second number", value=0.0)
         
@@ -75,6 +77,29 @@ def scientific_calculator():
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
                 st.latex(f"{num1} ^ {num2} = {result}")
+    
+    # Graphing a function
+    elif operation == "Graph a Function":
+        function_input = st.text_input("Enter a mathematical function (e.g., np.sin(x), x**2, np.log(x+1))", value="np.sin(x)")
+        x_range = st.slider("Select x range", -10.0, 10.0, (0.0, 10.0), 0.1)
+
+        if st.button("Plot"):
+            x = np.linspace(x_range[0], x_range[1], 100)
+            try:
+                # Create a new figure
+                plt.figure()
+                y = eval(function_input)  # Evaluate the user input as a function of x
+                plt.plot(x, y, label=f"y = {function_input}")
+                plt.title("Graph of the Function")
+                plt.xlabel("x")
+                plt.ylabel("y")
+                plt.axhline(0, color='black', lw=0.5)
+                plt.axvline(0, color='black', lw=0.5)
+                plt.grid()
+                plt.legend()
+                st.pyplot(plt)
+            except Exception as e:
+                st.markdown(f"<h2 style='color: red;'>Error: {str(e)}</h2>", unsafe_allow_html=True)
 
 # Running the app
 if __name__ == "__main__":
