@@ -5,7 +5,7 @@ import math
 def scientific_calculator():
     # Title and image
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
-    st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
+    #st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
 
     # Button for voice input
