@@ -4,9 +4,9 @@ import math
 def scientific_calculator():
     # Initialize session state variables if they don't exist
     if 'num1' not in st.session_state:
-        st.session_state.num1 = 0
+        st.session_state.num1 = 0.0  # Ensure it's a float
     if 'num2' not in st.session_state:
-        st.session_state.num2 = 0
+        st.session_state.num2 = 0.0  # Ensure it's a float
 
     # Green heading for the title
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
@@ -30,9 +30,9 @@ def scientific_calculator():
     # Input area
     col1, col2, col3 = st.columns(3)
     with col1:
-        num1 = st.number_input("Num 1", value=st.session_state.num1, step=1.0, key="num1")
+        num1 = st.number_input("Num 1", value=float(st.session_state.num1), step=1.0, key="num1")
     with col2:
-        num2 = st.number_input("Num 2", value=st.session_state.num2, step=1.0, key="num2")
+        num2 = st.number_input("Num 2", value=float(st.session_state.num2), step=1.0, key="num2")
     with col3:
         operation = st.selectbox("Operation", [
             "Add", "Subtract", "Multiply", "Divide", 
@@ -96,15 +96,4 @@ def scientific_calculator():
             elif operation == "Cosine":
                 result = math.cos(math.radians(st.session_state.num1))
             elif operation == "Tangent":
-                result = math.tan(math.radians(st.session_state.num1))
-            elif operation == "Logarithm":
-                result = math.log10(st.session_state.num1)
-            elif operation == "Square Root":
-                result = math.sqrt(st.session_state.num1)
-            elif operation == "Power":
-                result = math.pow(st.session_state.num1, st.session_state.num2)
-
-            st.write(f"**Result: {result}**")
-
-if __name__ == "__main__":
-    scientific_calculator()
+                result = math.tan(math.radians(st.session_state.num1)
