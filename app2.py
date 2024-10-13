@@ -1,7 +1,5 @@
 import streamlit as st
 import math
-import numpy as np
-import matplotlib.pyplot as plt
 
 def scientific_calculator():
     # Green heading for the title
@@ -29,7 +27,7 @@ def scientific_calculator():
     operation = st.selectbox("Select operation", [
         "Add", "Subtract", "Multiply", "Divide", 
         "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
-        "Square Root", "Power (x^y)", "Plot Function"
+        "Square Root", "Power (x^y)"
     ])
 
     # Handling single-operand operations
@@ -54,7 +52,7 @@ def scientific_calculator():
                 st.latex(f"\\sqrt{{{num}}} = {result}")
     
     # Handling two-operand operations
-    elif operation in ["Add", "Subtract", "Multiply", "Divide", "Power (x^y)"]:
+    else:
         num1 = st.number_input("Enter first number", value=0.0)
         num2 = st.number_input("Enter second number", value=0.0)
         
@@ -78,7 +76,6 @@ def scientific_calculator():
                 result = math.pow(num1, num2)
                 st.latex(f"{num1} ^ {num2} = {result}")
 
-    # Handling plot function
-    elif operation == "Plot Function":
-        function = st.text_input("Enter a function of x (e.g., x**2, np.sin(x))", "np.sin(x)")
-        x_range = st.slider("Select x range", -10.0, 10.0, (0.
+# Running the app
+if __name__ == "__main__":
+    scientific_calculator()
