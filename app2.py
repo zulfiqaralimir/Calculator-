@@ -1,38 +1,45 @@
 import streamlit as st
-import speech_recognition as sr
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_function(function, x_range):
+    x = np.linspace(x_range[0], x_range[1], 100)
+    y = eval(function)  # Evaluate the function safely (ensure input is controlled)
+    
+    plt.figure(figsize=(8, 4))
+    plt.plot(x, y, label=f'y = {function}', color='blue')
+    plt.title('Graph of the function')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.axhline(0, color='black', linewidth=0.5, ls='--')
+    plt.axvline(0, color='black', linewidth=0.5, ls='--')
+    plt.grid()
+    plt.legend()
+    plt.tight_layout()
+    
+    st.pyplot(plt)
 
 def scientific_calculator():
-    # Title and image
+    # Green heading for the title
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
-    #st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
+    
+    # Displaying an image with specified dimensions (width=300 pixels and height=75 pixels)
+    st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
+
+    # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
 
-    # Button for voice input
-    if st.button("Speak"):
-        recognizer = sr.Recognizer()
-        with sr.Microphone() as source:
-            st.write("Listening...")
-            audio = recognizer.listen(source)
-            try:
-                command = recognizer.recognize_google(audio)
-                st.success(f"You said: {command}")
-                # Here you can parse the command to perform calculations
-            except sr.UnknownValueError:
-                st.error("Could not understand audio")
-            except sr.RequestError:
-                st.error("Could not request results from Google Speech Recognition service")
-
-    # Other calculator functionalities remain the same
     operation = st.selectbox("Select operation", [
-        "Add", "Subtract", "Multiply", "Divide",
-        "Sine", "Cosine", "Tangent", "Logarithm (base 10)",
-        "Square Root", "Power (x^y)"
+        "Add", "Subtract", "Multiply", "Divide", 
+        "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
+        "Square Root", "Power (x^y)", "Plot Function"
     ])
 
     # Handling single-operand operations
     if operation in ["Sine", "Cosine", "Tangent", "Logarithm (base 10)", "Square Root"]:
         num = st.number_input("Enter the number", value=0.0)
+        
         if st.button("Calculate"):
             if operation == "Sine":
                 result = math.sin(math.radians(num))
@@ -51,9 +58,10 @@ def scientific_calculator():
                 st.latex(f"\\sqrt{{{num}}} = {result}")
 
     # Handling two-operand operations
-    else:
+    elif operation in ["Add", "Subtract", "Multiply", "Divide", "Power (x^y)"]:
         num1 = st.number_input("Enter first number", value=0.0)
         num2 = st.number_input("Enter second number", value=0.0)
+        
         if st.button("Calculate"):
             if operation == "Add":
                 result = num1 + num2
@@ -73,6 +81,15 @@ def scientific_calculator():
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
                 st.latex(f"{num1} ^ {num2} = {result}")
+
+    # Handling plotting of a mathematical function
+    elif operation == "Plot Function":
+        function = st.text_input("Enter a mathematical function of x (e.g., np.sin(x), x**2, np.log(x))", value="np.sin(x)")
+        x_min = st.number_input("Enter minimum x value", value=-10.0)
+        x_max = st.number_input("Enter maximum x value", value=10.0)
+        
+        if st.button("Plot"):
+            plot_function(function, (x_min, x_max))
 
 # Running the app
 if __name__ == "__main__":
