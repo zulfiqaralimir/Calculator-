@@ -5,8 +5,8 @@ def scientific_calculator():
     # Green heading for the title
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
     
-    # Displaying an image (replace with your image URL or path)
-    #st.image("https://png.pngtree.com/png-vector/20221019/ourmid/pngtree-image-calculator-png-image_6352778.png", use_column_width=True)
+    # Displaying an image with specified dimensions (width=300 pixels and height=75 pixels)
+    #st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
 
     # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
@@ -37,19 +37,19 @@ def scientific_calculator():
         if st.button("Calculate"):
             if operation == "Sine":
                 result = math.sin(math.radians(num))
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>sin({num}) = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"\\text{{sin}}({num}) = {result}")
             elif operation == "Cosine":
                 result = math.cos(math.radians(num))
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>cos({num}) = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"\\text{{cos}}({num}) = {result}")
             elif operation == "Tangent":
                 result = math.tan(math.radians(num))
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>tan({num}) = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"\\text{{tan}}({num}) = {result}")
             elif operation == "Logarithm (base 10)":
                 result = math.log10(num)
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>log({num}) = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"\\text{{log}}({num}) = {result}")
             elif operation == "Square Root":
                 result = math.sqrt(num)
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>√{num} = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"\\sqrt{{{num}}} = {result}")
     
     # Handling two-operand operations
     else:
@@ -59,22 +59,22 @@ def scientific_calculator():
         if st.button("Calculate"):
             if operation == "Add":
                 result = num1 + num2
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} + {num2} = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"{num1} + {num2} = {result}")
             elif operation == "Subtract":
                 result = num1 - num2
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} - {num2} = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"{num1} - {num2} = {result}")
             elif operation == "Multiply":
                 result = num1 * num2
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} * {num2} = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"{num1} \\times {num2} = {result}")
             elif operation == "Divide":
                 if num2 != 0:
                     result = num1 / num2
-                    st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1} / {num2} = {result}</h2>", unsafe_allow_html=True)
+                    st.latex(f"{num1} \\div {num2} = {result}")
                 else:
                     st.markdown("<h2 style='color: red; font-weight: bold; font-size: 24px;'>Cannot divide by zero</h2>", unsafe_allow_html=True)
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
-                st.markdown(f"<h2 style='color: blue; font-weight: bold; font-size: 24px;'>{num1}^{num2} = {result}</h2>", unsafe_allow_html=True)
+                st.latex(f"{num1} ^ {num2} = {result}")
 
 # Running the app
 if __name__ == "__main__":
