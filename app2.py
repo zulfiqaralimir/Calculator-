@@ -1,33 +1,68 @@
 import streamlit as st
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+def apply_theme(dark_mode):
+    if dark_mode:
+        st.markdown(
+            """
+            <style>
+            body {
+                background-color: #121212;
+                color: white;
+            }
+            div.stButton > button {
+                background-color: #1e1e1e;
+                color: white;
+                font-weight: bold;
+            }
+            h1, h2, h3, p {
+                color: white;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(
+            """
+            <style>
+            body {
+                background-color: white;
+                color: black;
+            }
+            div.stButton > button {
+                background-color: black;
+                color: white;
+                font-weight: bold;
+            }
+            h1, h2, h3, p {
+                color: black;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
 def scientific_calculator():
+    # Dark mode toggle
+    dark_mode = st.sidebar.checkbox("Enable Dark Mode")
+    apply_theme(dark_mode)
+    
     # Green heading for the title
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
     
     # Displaying an image with specified dimensions (width=300 pixels and height=75 pixels)
-    #st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
+    st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
 
     # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
-    
-    # Style the button with black background and white bold text
-    st.markdown(
-        """
-        <style>
-        div.stButton > button {
-            background-color: black;
-            color: white;
-            font-weight: bold;
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
 
     operation = st.selectbox("Select operation", [
         "Add", "Subtract", "Multiply", "Divide", 
         "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
-        "Square Root", "Power (x^y)"
+        "Square Root", "Power (x^y)", "Plot Function"
     ])
 
     # Handling single-operand operations
@@ -52,7 +87,7 @@ def scientific_calculator():
                 st.latex(f"\\sqrt{{{num}}} = {result}")
     
     # Handling two-operand operations
-    else:
+    elif operation in ["Add", "Subtract", "Multiply", "Divide", "Power (x^y)"]:
         num1 = st.number_input("Enter first number", value=0.0)
         num2 = st.number_input("Enter second number", value=0.0)
         
@@ -75,6 +110,28 @@ def scientific_calculator():
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
                 st.latex(f"{num1} ^ {num2} = {result}")
+
+    # Handling plot function
+    elif operation == "Plot Function":
+        function = st.text_input("Enter a function of x (e.g., x**2, np.sin(x))", "np.sin(x)")
+        x_range = st.slider("Select x range", -10.0, 10.0, (0.0, 10.0))
+        
+        if st.button("Plot"):
+            x = np.linspace(x_range[0], x_range[1], 100)
+            try:
+                y = eval(function)
+                plt.figure(figsize=(10, 5))
+                plt.plot(x, y, label=function)
+                plt.title("Function Plot")
+                plt.xlabel("x")
+                plt.ylabel("f(x)")
+                plt.axhline(0, color='black', lw=0.5, ls='--')
+                plt.axvline(0, color='black', lw=0.5, ls='--')
+                plt.grid()
+                plt.legend()
+                st.pyplot(plt)
+            except Exception as e:
+                st.error(f"Error in plotting: {e}")
 
 # Running the app
 if __name__ == "__main__":
