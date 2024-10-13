@@ -29,7 +29,7 @@ def scientific_calculator():
     operation = st.selectbox("Select operation", [
         "Add", "Subtract", "Multiply", "Divide", 
         "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
-        "Square Root", "Power (x^y)", "Graph a Function"
+        "Square Root", "Power (x^y)", "Plot Function"
     ])
 
     # Handling single-operand operations
@@ -77,30 +77,8 @@ def scientific_calculator():
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
                 st.latex(f"{num1} ^ {num2} = {result}")
-    
-    # Graphing a function
-    elif operation == "Graph a Function":
-        function_input = st.text_input("Enter a mathematical function (e.g., np.sin(x), x**2, np.log(x+1))", value="np.sin(x)")
-        x_range = st.slider("Select x range", -10.0, 10.0, (0.0, 10.0), 0.1)
 
-        if st.button("Plot"):
-            x = np.linspace(x_range[0], x_range[1], 100)
-            try:
-                # Create a new figure
-                plt.figure()
-                y = eval(function_input)  # Evaluate the user input as a function of x
-                plt.plot(x, y, label=f"y = {function_input}")
-                plt.title("Graph of the Function")
-                plt.xlabel("x")
-                plt.ylabel("y")
-                plt.axhline(0, color='black', lw=0.5)
-                plt.axvline(0, color='black', lw=0.5)
-                plt.grid()
-                plt.legend()
-                st.pyplot(plt)
-            except Exception as e:
-                st.markdown(f"<h2 style='color: red;'>Error: {str(e)}</h2>", unsafe_allow_html=True)
-
-# Running the app
-if __name__ == "__main__":
-    scientific_calculator()
+    # Handling plot function
+    elif operation == "Plot Function":
+        function = st.text_input("Enter a function of x (e.g., x**2, np.sin(x))", "np.sin(x)")
+        x_range = st.slider("Select x range", -10.0, 10.0, (0.
