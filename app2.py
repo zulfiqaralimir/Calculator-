@@ -2,6 +2,12 @@ import streamlit as st
 import math
 
 def scientific_calculator():
+    # Initialize session state variables if they don't exist
+    if 'num1' not in st.session_state:
+        st.session_state.num1 = 0
+    if 'num2' not in st.session_state:
+        st.session_state.num2 = 0
+
     # Green heading for the title
     st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
     
@@ -24,9 +30,9 @@ def scientific_calculator():
     # Input area
     col1, col2, col3 = st.columns(3)
     with col1:
-        num1 = st.number_input("Num 1", value=0.0, step=1.0, key="num1")
+        num1 = st.number_input("Num 1", value=st.session_state.num1, step=1.0, key="num1")
     with col2:
-        num2 = st.number_input("Num 2", value=0.0, step=1.0, key="num2")
+        num2 = st.number_input("Num 2", value=st.session_state.num2, step=1.0, key="num2")
     with col3:
         operation = st.selectbox("Operation", [
             "Add", "Subtract", "Multiply", "Divide", 
@@ -78,25 +84,25 @@ def scientific_calculator():
     with calc_layout[3]:
         if st.button("Calculate"):
             if operation == "Add":
-                result = num1 + num2
+                result = st.session_state.num1 + st.session_state.num2
             elif operation == "Subtract":
-                result = num1 - num2
+                result = st.session_state.num1 - st.session_state.num2
             elif operation == "Multiply":
-                result = num1 * num2
+                result = st.session_state.num1 * st.session_state.num2
             elif operation == "Divide":
-                result = num1 / num2 if num2 != 0 else "Error: Division by zero"
+                result = st.session_state.num1 / st.session_state.num2 if st.session_state.num2 != 0 else "Error: Division by zero"
             elif operation == "Sine":
-                result = math.sin(math.radians(num1))
+                result = math.sin(math.radians(st.session_state.num1))
             elif operation == "Cosine":
-                result = math.cos(math.radians(num1))
+                result = math.cos(math.radians(st.session_state.num1))
             elif operation == "Tangent":
-                result = math.tan(math.radians(num1))
+                result = math.tan(math.radians(st.session_state.num1))
             elif operation == "Logarithm":
-                result = math.log10(num1)
+                result = math.log10(st.session_state.num1)
             elif operation == "Square Root":
-                result = math.sqrt(num1)
+                result = math.sqrt(st.session_state.num1)
             elif operation == "Power":
-                result = math.pow(num1, num2)
+                result = math.pow(st.session_state.num1, st.session_state.num2)
 
             st.write(f"**Result: {result}**")
 
