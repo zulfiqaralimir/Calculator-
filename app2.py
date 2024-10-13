@@ -1,39 +1,26 @@
 import streamlit as st
 import math
-import numpy as np
 import matplotlib.pyplot as plt
-
-def plot_function(function, x_range):
-    x = np.linspace(x_range[0], x_range[1], 100)
-    y = eval(function)  # Evaluate the function safely (ensure input is controlled)
-    
-    plt.figure(figsize=(8, 4))
-    plt.plot(x, y, label=f'y = {function}', color='blue')
-    plt.title('Graph of the function')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.axhline(0, color='black', linewidth=0.5, ls='--')
-    plt.axvline(0, color='black', linewidth=0.5, ls='--')
-    plt.grid()
-    plt.legend()
-    plt.tight_layout()
-    
-    st.pyplot(plt)
+import numpy as np
 
 def scientific_calculator():
     # Green heading for the title
-    st.markdown("<h1 style='color: green;'>Scientific & Graphical Calculator</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color: green;'>Scientific Calculator</h1>", unsafe_allow_html=True)
     
     # Displaying an image with specified dimensions (width=300 pixels and height=75 pixels)
-    #st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
+    st.image("https://via.placeholder.com/300x75.png?text=Your+Calculator+Image", width=300, height=75)
 
     # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
 
+    # Initialize session state for history
+    if 'history' not in st.session_state:
+        st.session_state.history = []
+
     operation = st.selectbox("Select operation", [
         "Add", "Subtract", "Multiply", "Divide", 
         "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
-        "Square Root", "Power (x^y)", "Plot Function"
+        "Square Root", "Power (x^y)", "Graph Function"
     ])
 
     # Handling single-operand operations
@@ -43,19 +30,27 @@ def scientific_calculator():
         if st.button("Calculate"):
             if operation == "Sine":
                 result = math.sin(math.radians(num))
+                calculation = f"sin({num}) = {result}"
                 st.latex(f"\\text{{sin}}({num}) = {result}")
             elif operation == "Cosine":
                 result = math.cos(math.radians(num))
+                calculation = f"cos({num}) = {result}"
                 st.latex(f"\\text{{cos}}({num}) = {result}")
             elif operation == "Tangent":
                 result = math.tan(math.radians(num))
+                calculation = f"tan({num}) = {result}"
                 st.latex(f"\\text{{tan}}({num}) = {result}")
             elif operation == "Logarithm (base 10)":
                 result = math.log10(num)
+                calculation = f"log({num}) = {result}"
                 st.latex(f"\\text{{log}}({num}) = {result}")
             elif operation == "Square Root":
                 result = math.sqrt(num)
+                calculation = f"√{num} = {result}"
                 st.latex(f"\\sqrt{{{num}}} = {result}")
+
+            # Add calculation to history
+            st.session_state.history.append(calculation)
 
     # Handling two-operand operations
     elif operation in ["Add", "Subtract", "Multiply", "Divide", "Power (x^y)"]:
@@ -65,31 +60,55 @@ def scientific_calculator():
         if st.button("Calculate"):
             if operation == "Add":
                 result = num1 + num2
+                calculation = f"{num1} + {num2} = {result}"
                 st.latex(f"{num1} + {num2} = {result}")
             elif operation == "Subtract":
                 result = num1 - num2
+                calculation = f"{num1} - {num2} = {result}"
                 st.latex(f"{num1} - {num2} = {result}")
             elif operation == "Multiply":
                 result = num1 * num2
+                calculation = f"{num1} × {num2} = {result}"
                 st.latex(f"{num1} \\times {num2} = {result}")
             elif operation == "Divide":
                 if num2 != 0:
                     result = num1 / num2
+                    calculation = f"{num1} ÷ {num2} = {result}"
                     st.latex(f"{num1} \\div {num2} = {result}")
                 else:
                     st.markdown("<h2 style='color: red; font-weight: bold; font-size: 24px;'>Cannot divide by zero</h2>", unsafe_allow_html=True)
+                    return  # Skip history for this operation
             elif operation == "Power (x^y)":
                 result = math.pow(num1, num2)
+                calculation = f"{num1} ^ {num2} = {result}"
                 st.latex(f"{num1} ^ {num2} = {result}")
 
-    # Handling plotting of a mathematical function
-    elif operation == "Plot Function":
-        function = st.text_input("Enter a mathematical function of x (e.g., np.sin(x), x**2, np.log(x))", value="np.sin(x)")
-        x_min = st.number_input("Enter minimum x value", value=-10.0)
-        x_max = st.number_input("Enter maximum x value", value=10.0)
+            # Add calculation to history
+            st.session_state.history.append(calculation)
+
+    # Handling graphing capabilities
+    elif operation == "Graph Function":
+        function_input = st.text_input("Enter a mathematical function (e.g., sin(x), cos(x), x**2)")
+        x_values = np.linspace(-10, 10, 400)
         
         if st.button("Plot"):
-            plot_function(function, (x_min, x_max))
+            try:
+                # Safely evaluate the function
+                y_values = eval(function_input)
+                plt.plot(x_values, y_values)
+                plt.title(f'Graph of {function_input}')
+                plt.xlabel('x')
+                plt.ylabel('y')
+                plt.grid()
+                st.pyplot(plt)
+            except Exception as e:
+                st.error(f"Error in function: {e}")
+
+    # Display calculation history
+    if st.session_state.history:
+        st.markdown("<h2 style='color: blue;'>Calculation History</h2>", unsafe_allow_html=True)
+        for calc in st.session_state.history:
+            st.write(calc)
 
 # Running the app
 if __name__ == "__main__":
