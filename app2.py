@@ -1,67 +1,7 @@
 import streamlit as st
 import math
-import matplotlib.pyplot as plt
 import numpy as np
-import speech_recognition as sr
-
-def recognize_speech():
-    """Capture audio and recognize speech."""
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        st.info("Listening...")
-        audio = r.listen(source)
-        try:
-            command = r.recognize_google(audio)
-            st.success(f"You said: {command}")
-            return command
-        except sr.UnknownValueError:
-            st.error("Sorry, I could not understand the audio.")
-            return None
-        except sr.RequestError:
-            st.error("Could not request results from Google Speech Recognition service.")
-            return None
-
-def parse_voice_command(command):
-    """Parse the command into numbers and operation."""
-    try:
-        if "plus" in command:
-            operation = "Add"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "minus" in command:
-            operation = "Subtract"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "multiply" in command:
-            operation = "Multiply"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "divide" in command:
-            operation = "Divide"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "sine" in command:
-            operation = "Sine"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "cosine" in command:
-            operation = "Cosine"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "tangent" in command:
-            operation = "Tangent"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "log" in command:
-            operation = "Logarithm (base 10)"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "square root" in command:
-            operation = "Square Root"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        elif "power" in command:
-            operation = "Power (x^y)"
-            numbers = [float(x) for x in command.split() if x.replace('.', '', 1).isdigit()]
-        else:
-            st.error("Sorry, I did not recognize that operation.")
-            return None, None
-        
-        return operation, numbers
-    except Exception as e:
-        st.error(f"Error parsing command: {e}")
-        return None, None
+import matplotlib.pyplot as plt
 
 def scientific_calculator():
     # Green heading for the title
@@ -72,24 +12,25 @@ def scientific_calculator():
 
     # Displaying your name in blue and italic
     st.markdown("<p style='color: blue; font-style: italic;'>Created by Zulfiqar Ali Mir</p>", unsafe_allow_html=True)
+    
+    # Style the button with black background and white bold text
+    st.markdown(
+        """
+        <style>
+        div.stButton > button {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )
 
-    # Initialize session state for history
-    if 'history' not in st.session_state:
-        st.session_state.history = []
-
-    # Voice input button
-    if st.button("Speak"):
-        command = recognize_speech()
-        if command:
-            operation, numbers = parse_voice_command(command)
-            if operation and numbers:
-                # Calculate based on parsed input
-                perform_calculation(operation, numbers)
-
+    # Selection for mathematical operation
     operation = st.selectbox("Select operation", [
         "Add", "Subtract", "Multiply", "Divide", 
         "Sine", "Cosine", "Tangent", "Logarithm (base 10)", 
-        "Square Root", "Power (x^y)", "Graph Function"
+        "Square Root", "Power (x^y)", "Graph a function"
     ])
 
     # Handling single-operand operations
@@ -97,84 +38,67 @@ def scientific_calculator():
         num = st.number_input("Enter the number", value=0.0)
         
         if st.button("Calculate"):
-            perform_calculation(operation, [num])
-
+            if operation == "Sine":
+                result = math.sin(math.radians(num))
+                st.latex(f"\\text{{sin}}({num}) = {result}")
+            elif operation == "Cosine":
+                result = math.cos(math.radians(num))
+                st.latex(f"\\text{{cos}}({num}) = {result}")
+            elif operation == "Tangent":
+                result = math.tan(math.radians(num))
+                st.latex(f"\\text{{tan}}({num}) = {result}")
+            elif operation == "Logarithm (base 10)":
+                result = math.log10(num)
+                st.latex(f"\\text{{log}}({num}) = {result}")
+            elif operation == "Square Root":
+                result = math.sqrt(num)
+                st.latex(f"\\sqrt{{{num}}} = {result}")
+    
     # Handling two-operand operations
     elif operation in ["Add", "Subtract", "Multiply", "Divide", "Power (x^y)"]:
         num1 = st.number_input("Enter first number", value=0.0)
         num2 = st.number_input("Enter second number", value=0.0)
         
         if st.button("Calculate"):
-            perform_calculation(operation, [num1, num2])
+            if operation == "Add":
+                result = num1 + num2
+                st.latex(f"{num1} + {num2} = {result}")
+            elif operation == "Subtract":
+                result = num1 - num2
+                st.latex(f"{num1} - {num2} = {result}")
+            elif operation == "Multiply":
+                result = num1 * num2
+                st.latex(f"{num1} \\times {num2} = {result}")
+            elif operation == "Divide":
+                if num2 != 0:
+                    result = num1 / num2
+                    st.latex(f"{num1} \\div {num2} = {result}")
+                else:
+                    st.markdown("<h2 style='color: red; font-weight: bold; font-size: 24px;'>Cannot divide by zero</h2>", unsafe_allow_html=True)
+            elif operation == "Power (x^y)":
+                result = math.pow(num1, num2)
+                st.latex(f"{num1} ^ {num2} = {result}")
 
-    # Handling graphing capabilities
-    elif operation == "Graph Function":
-        function_input = st.text_input("Enter a mathematical function (e.g., sin(x), cos(x), x**2)")
+    # Graphing a function
+    elif operation == "Graph a function":
+        st.subheader("Graph a Function")
+        func = st.text_input("Enter a function of x (e.g., x**2, np.sin(x), etc.)", "x**2")
         x_values = np.linspace(-10, 10, 400)
-        
-        if st.button("Plot"):
-            try:
-                # Safely evaluate the function
-                y_values = eval(function_input)
-                plt.plot(x_values, y_values)
-                plt.title(f'Graph of {function_input}')
-                plt.xlabel('x')
-                plt.ylabel('y')
-                plt.grid()
-                st.pyplot(plt)
-            except Exception as e:
-                st.error(f"Error in function: {e}")
+        try:
+            y_values = eval(func)
+            plt.figure(figsize=(10, 5))
+            plt.plot(x_values, y_values, label=f"y = {func}")
+            plt.title(f"Graph of y = {func}")
+            plt.xlabel("x")
+            plt.ylabel("y")
+            plt.axhline(0, color='black', lw=0.5, ls='--')
+            plt.axvline(0, color='black', lw=0.5, ls='--')
+            plt.grid()
+            plt.legend()
+            st.pyplot(plt)
+        except Exception as e:
+            st.error(f"Error in the function: {e}")
 
-    # Display calculation history
-    if st.session_state.history:
-        st.markdown("<h2 style='color: blue;'>Calculation History</h2>", unsafe_allow_html=True)
-        for calc in st.session_state.history:
-            st.write(calc)
-
-def perform_calculation(operation, numbers):
-    """Perform the calculation based on operation and numbers."""
-    try:
-        if operation == "Sine":
-            result = math.sin(math.radians(numbers[0]))
-            calculation = f"sin({numbers[0]}) = {result}"
-            st.latex(f"\\text{{sin}}({numbers[0]}) = {result}")
-        elif operation == "Cosine":
-            result = math.cos(math.radians(numbers[0]))
-            calculation = f"cos({numbers[0]}) = {result}"
-            st.latex(f"\\text{{cos}}({numbers[0]}) = {result}")
-        elif operation == "Tangent":
-            result = math.tan(math.radians(numbers[0]))
-            calculation = f"tan({numbers[0]}) = {result}"
-            st.latex(f"\\text{{tan}}({numbers[0]}) = {result}")
-        elif operation == "Logarithm (base 10)":
-            result = math.log10(numbers[0])
-            calculation = f"log({numbers[0]}) = {result}"
-            st.latex(f"\\text{{log}}({numbers[0]}) = {result}")
-        elif operation == "Square Root":
-            result = math.sqrt(numbers[0])
-            calculation = f"√{numbers[0]} = {result}"
-            st.latex(f"\\sqrt{{{numbers[0]}}} = {result}")
-        elif operation == "Add":
-            result = numbers[0] + numbers[1]
-            calculation = f"{numbers[0]} + {numbers[1]} = {result}"
-            st.latex(f"{numbers[0]} + {numbers[1]} = {result}")
-        elif operation == "Subtract":
-            result = numbers[0] - numbers[1]
-            calculation = f"{numbers[0]} - {numbers[1]} = {result}"
-            st.latex(f"{numbers[0]} - {numbers[1]} = {result}")
-        elif operation == "Multiply":
-            result = numbers[0] * numbers[1]
-            calculation = f"{numbers[0]} × {numbers[1]} = {result}"
-            st.latex(f"{numbers[0]} \\times {numbers[1]} = {result}")
-        elif operation == "Divide":
-            if numbers[1] != 0:
-                result = numbers[0] / numbers[1]
-                calculation = f"{numbers[0]} ÷ {numbers[1]} = {result}"
-                st.latex(f"{numbers[0]} \\div {numbers[1]} = {result}")
-            else:
-                st.markdown("<h2 style='color: red; font-weight: bold; font-size: 24px;'>Cannot divide by zero</h2>", unsafe_allow_html=True)
-                return
-        elif operation == "Power (x^y)":
-            result = math.pow(numbers[0], numbers[1])
-            calculation = f"{numbers[0]} ^ {numbers[1]} = {result}"
-            st.latex(f"{numbers[0]}
+# Running the app
+if __name__ == "__main__":
+    scientific_calculator()
